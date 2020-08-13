@@ -20,7 +20,7 @@ class FileStorage:
         if cls is not None:
             d = {}
             for key, value in self.__objects.items():
-                if cls == value.__class__ or cls == value.__class__.__name__:
+                if cls == value.__class__
                     d[key] = value
             return d
         return self.__objects
