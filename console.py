@@ -123,25 +123,21 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         else:
-            """creates a dictionary from a list of strings"""
+            """create dictionary from list of strings"""
             newdict = dict()
-            for ar in arg[1:]:
-                if "=" in ar:
-                    sep = ar.split('=', 1)
-                    key = sep[0]
-                    value = sep[1]
+
+            for item in arg[1:]:
+                key = item.split("=")[0]
+                value = item.split("=")[1]
                 if value[0] == '"':
-                    value = value[1:-1]
-                    value = value.replace("_", " ")
-                    value = value.replace('"', '\\"')
-                elif '.' in value:
-                    value = float(value)
+                    value = value.strip('"').replace("_", " ")
                 else:
-                    value = int(value)
-        newdict[key] = value
-        new_instance = HBNBCommand.classes[arg[0]](**newdict)
-        print(new_instance)
-        new_instance.save()
+                    value = eval(value)
+                newdict[key] = value
+            object = eval("{}()".format(arg[0]))
+            object.__dict__.update(newdict)
+            object.save()
+            print("{}".format(object.id))
 
     def help_create(self):
         """ Help information for the create method """

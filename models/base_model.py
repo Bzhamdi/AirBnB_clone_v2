@@ -9,7 +9,6 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
-        self.id = str(uuid.uuid4())
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
@@ -17,8 +16,11 @@ class BaseModel:
             self.updated_at = datetime.now()
             storage.new(self)
         else:
-            self.created_at = self.updated_at = datetime.now()
-
+            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            del kwargs['__class__']
             self.__dict__.update(kwargs)
 
     def __str__(self):
@@ -30,7 +32,6 @@ class BaseModel:
         """Updates updated_at with current time when instance is changed"""
         from models import storage
         self.updated_at = datetime.now()
-        storage.new(self)
         storage.save()
 
     def to_dict(self):
