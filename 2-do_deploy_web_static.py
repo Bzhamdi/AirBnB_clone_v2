@@ -18,35 +18,31 @@ def do_deploy(archive_path):
         return False
     try:
         try:
-            file_name = archive_path.split("/")[-1].split(".")[0]
+            f_name = archive_path.split("/")[-1].split(".")[0]
         except BaseException:
             return False
         try:
-            file_nametgz = archive_path.split("/")[-1]
+            f_nametgz = archive_path.split("/")[-1]
         except BaseException:
             return False
 
         path = "/data/web_static/releases/"
         data = "/data/web_static/current"
         put(archive_path, '/tmp/')
+        run("sudo mkdir -p /data/web_static/releases/{}/".format(f_name))
+
+        run('sudo tar -xzf /tmp/{} -C {}{}/'.format(f_nametgz, path, f_name))
+
         try:
-            run("sudo mkdir -p /data/web_static/releases/{}/".format(file_name))
-        except BaseException:
-            return False
-        try:
-            run('sudo  tar -xzf /tmp/{} -C {}{}/'.format(file_nametgz, path, file_name))
-        except BaseException:
-            return False
-        try:
-            run('sudo rm /tmp/{}'.format(file_nametgz))
+            run('sudo rm /tmp/{}'.format(f_nametgz))
         except BaseException:
             return False
 
-        run('sudo mv {0}{1}/web_static/* {0}{1}/'.format(path, file_name))
-        run('sudo rm -rf {}{}/web_static'.format(path, file_name))
+        run('sudo mv {0}{1}/web_static/* {0}{1}/'.format(path, f_name))
+        run('sudo rm -rf {}{}/web_static'.format(path, f_name))
         run('sudo rm -rf /data/web_static/current')
         try:
-            run('sudo ln -s {}{}/ {}'.format(path, file_name, data))
+            run('sudo ln -s {}{}/ {}'.format(path, f_name, data))
         except BaseException:
             return False
 
