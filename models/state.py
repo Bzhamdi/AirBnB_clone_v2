@@ -22,7 +22,7 @@ class State(BaseModel, Base):
         def cities(self):
             """getter to list all cities"""
             from models import storage
-            cities = storage.all(City)
+            cities = models.storage.all(City).values()
             listofcities = []
             for city in cities:
                 if city.state_id == self.id:
