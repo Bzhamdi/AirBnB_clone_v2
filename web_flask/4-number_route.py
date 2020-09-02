@@ -35,7 +35,7 @@ def python(text='is cool'):
 @app.route('/number/<int:n>', strict_slashes=False)
 def isnumber(n):
     """ display n if is an integer"""
-    return "{%d} is a number".format(n)
+    return ("%d is a number" % n)
 
 
 if __name__ == '__main__':
