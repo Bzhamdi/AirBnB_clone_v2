@@ -23,13 +23,13 @@ class DBStorage:
     def __init__(self):
         """ __init__(self) """
         self.__engine = create_engine(
-                'mysql+mysqldb://{}:{}@{}/{}'
-                .format(
-                        getenv('HBNB_MYSQL_USER'),
-                        getenv('HBNB_MYSQL_PWD'),
-                        getenv('HBNB_MYSQL_HOST'),
-                        getenv('HBNB_MYSQL_DB')),
-                pool_pre_ping=True)
+            'mysql+mysqldb://{}:{}@{}/{}'
+            .format(
+                getenv('HBNB_MYSQL_USER'),
+                getenv('HBNB_MYSQL_PWD'),
+                getenv('HBNB_MYSQL_HOST'),
+                getenv('HBNB_MYSQL_DB')),
+            pool_pre_ping=True)
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(bind=self.__engine)
 
@@ -40,16 +40,15 @@ class DBStorage:
             for inst in self.__session.query(cls).all():
                 key = inst.__class__.__name__ + '.' + inst.id
                 dect[key] = inst
-            
+
         else:
             for clas in classes:
                 clas = eval(clas)
                 for inst in self.__session.query(clas).all():
                     key = inst.__class__.__name__ + '.' + inst.id
                     dect[key] = inst
-        return dect 
+        return dect
 
-    
     def save(self):
         """ commit  """
         self.__session.commit()
@@ -61,11 +60,12 @@ class DBStorage:
 
     def new(self, obj):
         """ add """
-        self.__session.add(obj) 
+        self.__session.add(obj)
 
     def reload(self):
         """create reload"""
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(
+            bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
-        self.__session = Session()         
+        self.__session = Session()
