@@ -59,7 +59,5 @@ class FileStorage:
         if obj:
             del self.__objects["{}.{}".format(obj.__class__.__name__, obj.id)]
             self.save()
+
     
-    def close(self):
-        """Close the working."""
-        self.close()
